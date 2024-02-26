@@ -1,16 +1,13 @@
-# This file was created by: Chris Cozort
+#This file was created by Aaron Ko\
 
 # import libraries and modules
 import pygame as pg
-#imports everything in settings.py
 from settings import *
-# imports everything from sprites.py
 from sprites import *
-# imports random
 from random import randint
-# imports sys
 import sys
 from os import path
+
 
 # Define game class...
 class Game:
@@ -24,20 +21,27 @@ class Game:
         # setting game clock 
         self.clock = pg.time.Clock()
         self.load_data()
-
     def load_data(self):
         game_folder = path.dirname(__file__)
         self.map_data = []
+        '''
+        The with statement is a context manager in Python. 
+        It is used to ensure that a resource is properly closed or released 
+        after it is used. This can help to prevent errors and leaks.
+        '''
         with open(path.join(game_folder, 'map.txt'), 'rt') as f:
             for line in f:
                 print(line)
                 self.map_data.append(line)
+
     # Create run method which runs the whole GAME
     def new(self):
+        print("create new game...")
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
-        self.player1 = Player(self, 1, 1)
-        self.all_sprites.add(self.player1)
+        self.coins = pg.sprite.Group()
+        self.power_ups = pg.sprite.Group()
+        # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
         for row, tiles in enumerate(self.map_data):
@@ -47,6 +51,12 @@ class Game:
                 if tile == '1':
                     print("a wall at", row, col)
                     Wall(self, col, row)
+                if tile == 'P':
+                    self.player = Player(self, col, row)
+                if tile == 'C':
+                    Coin(self, col, row)
+                if tile == '3':
+                    PowerUp(self, col, row)
 
     def run(self):
         # 
@@ -56,11 +66,10 @@ class Game:
             self.events()
             self.update()
             self.draw()
-            #defines quit method
     def quit(self):
          pg.quit()
          sys.exit()
-# defines update
+
     def update(self):
         self.all_sprites.update()
     
@@ -69,31 +78,34 @@ class Game:
               pg.draw.line(self.screen, LIGHTGREY, (x, 0), (x, HEIGHT))
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
-
+    # def draw_text(self, surface, text, size, color, x, y):
+    #     font_name = pg.font.match_font('arial')
+    #     font = pg.font.Font(font_name, size)
+    #     text_surface = font.render(text, True, color)
+    #     text_rect = text_surface.get_rect()
+    #     text_rect.topleft = (x*TILESIZE,y*TILESIZE)
+    #     surface.blit(text_surface, text_rect)
     def draw(self):
             self.screen.fill(BGCOLOR)
             self.draw_grid()
             self.all_sprites.draw(self.screen)
+            # self.draw_text(self.screen, str(self.player.moneybag), 64, WHITE, 1, 1)
+
             pg.display.flip()
 
     def events(self):
-         #quits game if you lose.w
          for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.quit()
             # if event.type == pg.KEYDOWN:
-            #     #move the character left
-            #     if event.key == pg.K_a:
-            #         self.player1.move(dx=-1)
-            #     #move the character right
-            #     if event.key == pg.K_d:
-            #         self.player1.move(dx=1)
-            #     #move the character downds
-            #     if event.key == pg.K_s:
-            #         self.player1.move(dy=1)
-            #     #move the character up
-            #     if event.key == pg.K_w:
-            #         self.player1.move(dy=-1)
+            #     if event.key == pg.K_LEFT:
+            #         self.player.move(dx=-1)
+            #     if event.key == pg.K_RIGHT:
+            #         self.player.move(dx=1)
+            #     if event.key == pg.K_UP:
+            #         self.player.move(dy=-1)
+            #     if event.key == pg.K_DOWN:
+            #         self.player.move(dy=1)
 
 # Instantiate the game... 
 g = Game()
