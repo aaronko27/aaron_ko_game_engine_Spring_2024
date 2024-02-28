@@ -79,6 +79,7 @@ class Player(pg.sprite.Sprite):
         # add collision later
         self.collide_with_walls('y')
         self.collide_with_group(self.game.coins, True)
+        self.collide_with_group(self.game.power_ups, True)
           
         # coin_hits = pg.sprite.spritecollide(self.game.coins, True)
         # if coin_hits:
