@@ -7,6 +7,7 @@ TITLE = "My Fun Game"
 
 TILESIZE = 32
 
+WALLCOLOR = (0, 255, 255)
 
 BLACK = (0,0,0)
 WHITE = (255,255,255)
