@@ -35,11 +35,11 @@ class Game:
         self.load_data()
 
     def load_data(self):
-        game_folder = path.dirname(__file__)
+        self.game_folder = path.dirname(__file__)
         #self.img_folder = path.join(self.game_folder, 'images')
         #self.snd_folder = path.join(self.game_folder, 'sounds')
         self.map_data = []
-        with open(path.join(game_folder, LEVEL1), 'rt') as f:
+        with open(path.join(self.game_folder, LEVEL1), 'rt') as f:
             for line in f:
                 print(line)
                 self.map_data.append(line)
@@ -58,7 +58,7 @@ class Game:
          # reset map data list to empty
         self.map_data = []
          # open next level
-        with open(path.join(game_folder, lvl), 'rt') as f:
+        with open(path.join(self.game_folder, lvl), 'rt') as f:
             for line in f:
                 print(line)
                 self.map_data.append(line)
