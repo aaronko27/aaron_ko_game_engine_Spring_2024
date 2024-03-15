@@ -25,7 +25,7 @@ class Player(pg.sprite.Sprite):
         self.font = pg.font.Font(None, 36)  # Change the font and size as needed
         self.message = None
         #health 
-        self.hitpoints = 1000
+        self.hitpoints = 100
         #your weapon is not drawn
         self.weapon_drawn = False
         #self.draw_message()
@@ -110,7 +110,7 @@ class Player(pg.sprite.Sprite):
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
-                self.hitpoints -= 100
+                self.hitpoints -= 10
                 print("You have " + str(self.hitpoints) + " Health")
                 #if self.moneybag == 7:
                 #    def load_data(self):
@@ -126,7 +126,7 @@ class Player(pg.sprite.Sprite):
                     quit()
             #If you collect a heal power up then you heal 500 health
             if str(hits[0].__class__.__name__) == "Heal":
-                self.hitpoints += 500
+                self.hitpoints += 50
                 print("You healed, now you have " + str(self.hitpoints) + " Health")
             #Collecting a powerup heals you
             if str(hits[0].__class__.__name__) == "PowerUp":
@@ -184,7 +184,7 @@ class Sword(pg.sprite.Sprite):
         if hits:
             if str(hits[0].__class__.__name__) == "Mob":
                 print("you hurt a mob!")
-                hits[0].hitpoints -= 500
+                hits[0].hitpoints -= 50
     def update(self):
         # self.collide_with_group(self.game.coins, True)
         # if self.game.player.dir
@@ -271,7 +271,7 @@ class Mob(pg.sprite.Sprite):
         self.x = x * TILESIZE
         self.y = y * TILESIZE
         self.speed = 300
-        self.hitpoints = 1000
+        self.hitpoints = 100
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
     def collide_with_walls(self, dir):
