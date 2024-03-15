@@ -95,7 +95,8 @@ class Game:
         self.power_ups = pg.sprite.Group()
         self.mobs = pg.sprite.Group()
         self.heal = pg.sprite.Group()
-        #self.mobs = pg.sprite.Group()
+        self.weapons = pg.sprite.Group()
+        #fsself.mobs = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
         #     Wall(self, x, 5)
@@ -165,6 +166,8 @@ class Game:
          for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.quit()
+            #if event.key == pg.K_e:
+            #        self.player.weapon_drawn = False
             # if event.type == pg.KEYDOWN:
             #     if event.key == pg.K_LEFT:
             #         self.player.move(dx=-1)
