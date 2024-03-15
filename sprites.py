@@ -1,7 +1,7 @@
 #This file was created by : aaron Ko
 import pygame as pg
 from settings import *
-
+#Player function with all of the player characteristics like health speed coins counter and the players settings
 class Player(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites
@@ -14,28 +14,35 @@ class Player(pg.sprite.Sprite):
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
         self.y = y * TILESIZE
+        #coin count
         self.moneybag = 0
+        #speed setting
         self.speed = 300
         #Coin message
         self.font = pg.font.Font(None, 36)  # Change the font and size as needed
         self.message = None
+        #health 
         self.hitpoints = 1000
         #self.draw_message()
         
-
+    #display function that allows you to display messages
     def display_message(self, message):
         self.message = self.font.render(message, True, WHITE)
         
-    
+    #Get keys function allows you to move your character using the wasd keys or the up down left right keys.
     def get_keys(self):
         self.vx, self.vy = 0, 0
         keys = pg.key.get_pressed()
+        #left or A key allow you to move left
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -self.speed
+        #right or D key allow you to move right
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vx = self.speed 
+        #Up or W key allow you to move up
         if keys[pg.K_UP] or keys[pg.K_w]:
             self.vy = -self.speed
+        #keys Down and s allow you to move down
         if keys[pg.K_DOWN] or keys[pg.K_s]:
             self.vy = self.speed
         if self.vx != 0 and self.vy != 0:
@@ -55,7 +62,7 @@ class Player(pg.sprite.Sprite):
     
 
 
-            
+    #this function prevents you from running through walls and makes them solid. 
     def collide_with_walls(self, dir):
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
@@ -75,12 +82,16 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
+
+    #This function tells you what happens when you collide with a object and allws you to control what happens when they collide
     
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
         if hits:
+            #If you collide with the coin your moneybag gets added by 1
             if str(hits[0].__class__.__name__) == "Coin":
                 self.moneybag += 1
+            #If you collide with mob you lose 100 health
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
                 print("collided with mob")
@@ -94,17 +105,21 @@ class Player(pg.sprite.Sprite):
                 #            for line in f:
                 #                print(line)
                 #                self.map_data.append(line)
+            #if your health is 0 than you die and quit the game
                 if self.hitpoints <= 0:
                     print("You died")
                     quit()
-                    
+            #If you collect a heal power up then you heal 500 health
             if str(hits[0].__class__.__name__) == "Heal":
                 self.hitpoints += 500
                 print("You healed, now you have " + str(self.hitpoints) + " Health")
+            #Collecting a powerup heals you
             if str(hits[0].__class__.__name__) == "PowerUp":
                 self.speed += 50
 
-
+    #The update function calls the functions to allow you to move by clicking keys
+    #prevents you from running through walls and puts the objects on the map
+    #Also it lets the code know if you collide with an object whether to delete the object or not.
     def update(self):
         self.get_keys()
         self.x += self.vx * self.game.dt
@@ -127,31 +142,36 @@ class Player(pg.sprite.Sprite):
         #if coin_hits:
          #   print("I got a coin")
     #Edited stuff
+        #display screen
     def draw_message(self):
         if self.message:
             self.game.screen.blit(self.message, (350, 350))
     
         
        
-
+#Wall class that displays the walls
 class Wall(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.walls
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
+        #sets the wall to a certain color
         self.image.fill(WALLCOLOR)
+        #creates the box shape for the walls 
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
 
+#Coin class that shows the code for coins
 class Coin(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.coins
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        #Sets the coins to a certain color and shape
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(YELLOW)
         self.rect = self.image.get_rect()
@@ -159,12 +179,13 @@ class Coin(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
+#Heal Class 
 class Heal(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.heal
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        #sets the heal potion to a certain color and shape
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(BLUE)
         self.rect = self.image.get_rect()
@@ -173,12 +194,13 @@ class Heal(pg.sprite.Sprite):
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
         
-
+#Class for powerup that makes it look a certain wayh
 class PowerUp(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.power_ups
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        #Self.image creates the image and shape of powerup
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(WHITE)
         self.rect = self.image.get_rect()
@@ -186,12 +208,13 @@ class PowerUp(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
-
+#Creates the mob
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
         self.groups = game.all_sprites, game.mobs
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
+        #Creates the mob image
         self.image = pg.Surface((TILESIZE, TILESIZE))
         self.image.fill(RED)
         self.rect = self.image.get_rect()

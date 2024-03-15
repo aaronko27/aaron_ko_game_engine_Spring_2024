@@ -18,6 +18,7 @@ heal potion
 different levels
 map change
 '''
+#Creating different maps for different levels.
 LEVEL1 = "map.txt"
 LEVEL2 = "map2.txt"
 
@@ -39,6 +40,7 @@ class Game:
         #self.img_folder = path.join(self.game_folder, 'images')
         #self.snd_folder = path.join(self.game_folder, 'sounds')
         self.map_data = []
+        #opening LEVEL1 variable or map.txt as file for map
         with open(path.join(self.game_folder, LEVEL1), 'rt') as f:
             for line in f:
                 print(line)
@@ -48,7 +50,7 @@ class Game:
         It is used to ensure that a resource is properly closed or released 
         after it is used. This can help to prevent errors and leaks.
         '''
-    #Change level()
+    #Change level function
     def change_level(self, lvl):
          # kill all existing sprites first to save memory
         for s in self.all_sprites:
@@ -62,7 +64,7 @@ class Game:
             for line in f:
                 print(line)
                 self.map_data.append(line)
-    #     # repopulate the level with stuff
+    #     # add new map with the same things.
         for row, tiles in enumerate(self.map_data):
             print(row)
             for col, tile in enumerate(tiles):
@@ -86,6 +88,7 @@ class Game:
     # Create run method which runs the whole GAME
     def new(self):
         print("create new game...")
+        #running all objects inside the game and all functions.
         self.all_sprites = pg.sprite.Group()
         self.walls = pg.sprite.Group()
         self.coins = pg.sprite.Group()
@@ -100,6 +103,7 @@ class Game:
             print(row)
             for col, tile in enumerate(tiles):
                 print(col)
+                #adding all objects to game from the maps
                 if tile == '1': 
                     print("a wall at", row, col)
                     Wall(self, col, row)
@@ -118,7 +122,7 @@ class Game:
 
 
     def run(self):
-        # 
+        # runs the entire game and runs the functions draw update and events while using the clock
         self.playing = True
         while self.playing:
             self.dt = self.clock.tick(FPS) / 1000
@@ -128,9 +132,10 @@ class Game:
     def quit(self):
          pg.quit()
          sys.exit()
-
+    #updating game as time goes on
     def update(self):
         self.all_sprites.update()
+        #checking to see if the moneybag is 7 and when all coins are collected change map and level
         if self.player.moneybag > 6:
             self.change_level(LEVEL2)
     
@@ -140,12 +145,14 @@ class Game:
          for y in range(0, HEIGHT, TILESIZE):
               pg.draw.line(self.screen, LIGHTGREY, (0, y), (WIDTH, y))
     def draw_text(self, surface, text, size, color, x, y):
+        #setting the draw text to a certain color font size and font name
         font_name = pg.font.match_font('arial')
         font = pg.font.Font(font_name, size)
         text_surface = font.render(text, True, color)
         text_rect = text_surface.get_rect()
         text_rect.topleft = (x*TILESIZE,y*TILESIZE)
         surface.blit(text_surface, text_rect)
+        #draw function that draws the whole screen and displays your moneybag.
     def draw(self):
             self.screen.fill(BGCOLOR)
             self.draw_grid()
@@ -167,11 +174,13 @@ class Game:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
+    #create a start screen that requires user to click to send you to main game.
     def show_start_screen(self):
         self.screen.fill(BGCOLOR)
         self.draw_text(self.screen, "This is the start screen - press any key to play", 24, WHITE, WIDTH/2, HEIGHT/2)
         pg.display.flip()
         self.wait_for_key()
+    #the function that waits for the user to press any key
     def wait_for_key(self):
         waiting = True
         while waiting:
