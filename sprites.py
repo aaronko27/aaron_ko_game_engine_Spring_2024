@@ -5,14 +5,19 @@ from settings import *
 vec =pg.math.Vector2
 #Player function with all of the player characteristics like health speed coins counter and the players settings
 class Player(pg.sprite.Sprite):
+    #initiates the game or __init__
     def __init__(self, game, x, y):
+        #allows it to connect to all sprites
         self.groups = game.all_sprites
         # init super class
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
+        #colors the player green
         self.image.fill(GREEN)
+        #get the image of the rect
         self.rect = self.image.get_rect()
+        #gets the point of the player on the map 
         self.vx, self.vy = 0, 0
         self.x = x * TILESIZE
         self.y = y * TILESIZE
@@ -41,6 +46,7 @@ class Player(pg.sprite.Sprite):
     #Get keys function allows you to move your character using the wasd keys or the up down left right keys.
     def get_keys(self):
         self.vx, self.vy = 0, 0
+        #know what the key you pressed was so that you can update what happens when you press a certain key
         keys = pg.key.get_pressed()
         #left or A key allow you to move left
         if keys[pg.K_LEFT] or keys[pg.K_a]:
@@ -57,10 +63,12 @@ class Player(pg.sprite.Sprite):
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
             self.vy *= 0.7071
+            #make it so that if you click the key f your sword gets drawn if you don't have it drawn
         if keys[pg.K_f]:
             if not self.weapon_drawn:
                 Sword(self.game, self.rect.x + self.dir[0]*32, self.rect.y + self.dir[1]*32, abs(32*self.dir[0])+5, abs(32*self.dir[1])+5)
                 self.weapon_drawn = True
+        #make it so that if you click the key g your sword gets taken away
         if keys[pg.K_g]:
             self.weapon_drawn = False
 
@@ -79,6 +87,7 @@ class Player(pg.sprite.Sprite):
 
     #this function prevents you from running through walls and makes them solid. 
     def collide_with_walls(self, dir):
+        #if you collide with walls you get moved back as far as you moved into the wall
         if dir == 'x':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -102,15 +111,20 @@ class Player(pg.sprite.Sprite):
     
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
+        #if hits is the if statement that shows what happened when you collide with an object
         if hits:
             #If you collide with the coin your moneybag gets added by 1
             if str(hits[0].__class__.__name__) == "Coin":
+                #adds 1 coin to the money bag
                 self.moneybag += 1
             #If you collide with mob you lose 100 health
             if str(hits[0].__class__.__name__) == "Mob":
                 print(hits[0].__class__.__name__)
+                #display in terminal that you collided with the mob
                 print("collided with mob")
+                #subtract 10 health when you collide with the mob
                 self.hitpoints -= 10
+                #print out your current health 
                 print("You have " + str(self.hitpoints) + " Health")
                 #if self.moneybag == 7:
                 #    def load_data(self):
@@ -122,20 +136,25 @@ class Player(pg.sprite.Sprite):
                 #                self.map_data.append(line)
             #if your health is 0 than you die and quit the game
                 if self.hitpoints <= 0:
+                    #when you have less than or equal to 0 health, your game quits
                     print("You died")
                     quit()
             #If you collect a heal power up then you heal 500 health
             if str(hits[0].__class__.__name__) == "Heal":
+                #add 50 to your current health
                 self.hitpoints += 50
+                #print your current health in terminal
                 print("You healed, now you have " + str(self.hitpoints) + " Health")
             #Collecting a powerup heals you
             if str(hits[0].__class__.__name__) == "PowerUp":
+                #add 50 to your current speed
                 self.speed += 50
 
     #The update function calls the functions to allow you to move by clicking keys
     #prevents you from running through walls and puts the objects on the map
     #Also it lets the code know if you collide with an object whether to delete the object or not.
     def update(self):
+        #get_keys function gets called allowing you to constantly move your player and allow actions to happen
         self.get_keys()
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
@@ -145,9 +164,16 @@ class Player(pg.sprite.Sprite):
         self.rect.y = self.y
         # add collision later
         self.collide_with_walls('y')
+        #adds collision with all groups 
+        #if your collide with groups ends with True then your player deletes the object once you collide with it.
+        #if your collide with group ends with False then your player can't delete the object
+        #delete object
         self.collide_with_group(self.game.coins, True)
+        #delete object
         self.collide_with_group(self.game.power_ups, True)
+        #keep object
         self.collide_with_group(self.game.mobs, False)
+        #delete object
         self.collide_with_group(self.game.heal, True)
         #Coins message
         #if self.moneybag == 7:
@@ -160,6 +186,7 @@ class Player(pg.sprite.Sprite):
         #display screen
     def draw_message(self):
         if self.message:
+            #display your message 
             self.game.screen.blit(self.message, (350, 350))
     
 #sword class  
@@ -169,6 +196,7 @@ class Sword(pg.sprite.Sprite):
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((w, h))
+        #make the sword the color light blue
         self.image.fill(LIGHTBLUE)
         self.rect = self.image.get_rect()
         self.rect.w = w
@@ -178,23 +206,33 @@ class Sword(pg.sprite.Sprite):
         self.rect.x = x
         self.rect.y = y
         self.speed = 10
+        #print you created a sword in the terminal
         print("I created a sword")
+    #function that affects what happens when you collide with a mob 
     def collide_with_group(self, group, kill):
         hits = pg.sprite.spritecollide(self, group, kill)
+        #if hits function
         if hits:
             if str(hits[0].__class__.__name__) == "Mob":
+                #print your hurt a mob in terminal
                 print("you hurt a mob!")
+                #subtract 50 health from a mob
                 hits[0].hitpoints -= 50
+    #updates sword constantly
     def update(self):
         # self.collide_with_group(self.game.coins, True)
         # if self.game.player.dir
         self.rect.x = self.game.player.rect.x + self.game.player.dir[0]*32
         self.rect.y = self.game.player.rect.y + self.game.player.dir[1]*32
+        #get the image of the sword
         self.rect.width = abs(self.game.player.get_dir()[0]*32)+5
         self.rect.width = abs(self.game.player.get_dir()[1]*32)+5
+        #get the image of the sword
         self.image.get_rect()
+        #doesn't delete the mob 
         self.collide_with_group(self.game.mobs, False)
         if not self.game.player.weapon_drawn:
+            #remove the sword when your sword isn't drawn
             self.kill()
 #Wall class that displays the walls
 class Wall(pg.sprite.Sprite):
@@ -220,8 +258,11 @@ class Coin(pg.sprite.Sprite):
         self.game = game
         #Sets the coins to a certain color and shape
         self.image = pg.Surface((TILESIZE, TILESIZE))
+        #make the coin yellow
         self.image.fill(YELLOW)
+        #set the coin to a certain shape
         self.rect = self.image.get_rect()
+        #get the coordinates of the coin
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -234,7 +275,9 @@ class Heal(pg.sprite.Sprite):
         self.game = game
         #sets the heal potion to a certain color and shape
         self.image = pg.Surface((TILESIZE, TILESIZE))
+        #set coin to the color blue
         self.image.fill(BLUE)
+        #set coin to the shape rectangle
         self.rect = self.image.get_rect()
         self.x = x
         self.y = y
@@ -249,8 +292,11 @@ class PowerUp(pg.sprite.Sprite):
         self.game = game
         #Self.image creates the image and shape of powerup
         self.image = pg.Surface((TILESIZE, TILESIZE))
+        #set the color of the image to white
         self.image.fill(WHITE)
+        #make the shape of it a rectangle
         self.rect = self.image.get_rect()
+        #get the coordinates of the game 
         self.x = x
         self.y = y
         self.rect.x = x * TILESIZE
@@ -263,22 +309,30 @@ class Mob(pg.sprite.Sprite):
         self.game = game
         #Creates the mob image
         self.image = pg.Surface((TILESIZE, TILESIZE))
+        #color the mob red
         self.image.fill(RED)
+        #set the shape of the mob
         self.rect = self.image.get_rect()
+        #get the coordinates of the mob
         self.x = x
         self.y = y
         self.vx, self.vy = 100, 100
         self.x = x * TILESIZE
         self.y = y * TILESIZE
+        #get the speed of the mob
         self.speed = 300
+        #health of the mob
         self.hitpoints = 100
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+    #collides with walls function that prevents mobs from running through walls
     def collide_with_walls(self, dir):
         if dir == 'x':
             # print('colliding on the x')
+            #doesn't delete walls when you collide with it
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
+                #move the opposite direction when you collide with a wall
                 self.vx *= -1
                 self.rect.x = self.x
         if dir == 'y':
@@ -287,7 +341,9 @@ class Mob(pg.sprite.Sprite):
             if hits:
                 self.vy *= -1
                 self.rect.y = self.y
+    #updates what happens when you collide with a mob
     def update(self):
+        #kill the mob when the mob has less than 1 health
         if self.hitpoints < 1:
             self.kill()
         self.rect.x += 1
