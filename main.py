@@ -8,7 +8,7 @@ from random import randint
 import sys
 from os import path
 '''
-sword
+swordsssssssssssss
 damages
 enemies
 moving enemies

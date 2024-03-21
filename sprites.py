@@ -2,38 +2,40 @@
 import pygame as pg
 from settings import *
 
-vec =pg.math.Vector2
-#Player function with all of the player characteristics like health speed coins counter and the players settings
+# Define a vector class for easier vector operations
+vec = pg.math.Vector2
+
+# Player class representing the player character
 class Player(pg.sprite.Sprite):
-    #initiates the game or __init__
     def __init__(self, game, x, y):
-        #allows it to connect to all sprites
+        # Initialize the sprite
         self.groups = game.all_sprites
-        # init super class
         pg.sprite.Sprite.__init__(self, self.groups)
         self.game = game
         self.image = pg.Surface((TILESIZE, TILESIZE))
-        #colors the player green
-        self.image.fill(GREEN)
-        #get the image of the rect
+        self.image.fill(GREEN) 
+         # Color the player sprite green
         self.rect = self.image.get_rect()
-        #gets the point of the player on the map 
-        self.vx, self.vy = 0, 0
+        self.vx, self.vy = 0, 0 
+         # Velocity components
         self.x = x * TILESIZE
+          # Initial x position
         self.y = y * TILESIZE
+          # Initial y position
         self.dir = vec(0,0)
-        #coin count
-        self.moneybag = 0
-        #speed setting
-        self.speed = 300
-        #Coin message
-        self.font = pg.font.Font(None, 36)  # Change the font and size as needed
-        self.message = None
-        #health 
-        self.hitpoints = 100
-        #your weapon is not drawn
-        self.weapon_drawn = False
-        #self.draw_message()
+          # Direction vector
+        self.moneybag = 0  
+        # Counter for coins collected
+        self.speed = 300  
+        # Player movement speed
+        self.font = pg.font.Font(None, 36) 
+         # Font for displaying messages
+        self.message = None  
+        # Message to be displayed
+        self.hitpoints = 100  
+        # Player health
+        self.weapon_drawn = False 
+         # Flag to indicate if weapon is drawn
         
     #display function that allows you to display messages
     def display_message(self, message):
@@ -66,6 +68,7 @@ class Player(pg.sprite.Sprite):
             #make it so that if you click the key f your sword gets drawn if you don't have it drawn
         if keys[pg.K_f]:
             if not self.weapon_drawn:
+                #draw a sword if it isn't already drawn
                 Sword(self.game, self.rect.x + self.dir[0]*32, self.rect.y + self.dir[1]*32, abs(32*self.dir[0])+5, abs(32*self.dir[1])+5)
                 self.weapon_drawn = True
         #make it so that if you click the key g your sword gets taken away
@@ -199,8 +202,10 @@ class Sword(pg.sprite.Sprite):
         #make the sword the color light blue
         self.image.fill(LIGHTBLUE)
         self.rect = self.image.get_rect()
+        #get the shape of your sword
         self.rect.w = w
         self.rect.h = h
+        #get coordinates of your sword
         self.x = x
         self.y = y
         self.rect.x = x
