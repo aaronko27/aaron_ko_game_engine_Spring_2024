@@ -8,7 +8,7 @@ from random import randint
 import sys
 from os import path
 '''
-swordsssssssssssss
+swords
 damages
 enemies
 moving enemies
@@ -126,6 +126,7 @@ class Game:
         self.mobs = pg.sprite.Group()
         self.heal = pg.sprite.Group()
         self.weapons = pg.sprite.Group()
+        self.pew_pews = pg.sprite.Group()
         #fsself.mobs = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):

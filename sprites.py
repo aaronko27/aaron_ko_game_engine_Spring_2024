@@ -36,6 +36,8 @@ class Player(pg.sprite.Sprite):
         # Player health
         self.weapon_drawn = False 
          # Flag to indicate if weapon is drawn
+
+
         
     #display function that allows you to display messages
     def display_message(self, message):
@@ -65,6 +67,11 @@ class Player(pg.sprite.Sprite):
         if self.vx != 0 and self.vy != 0:
             self.vx *= 0.7071
             self.vy *= 0.7071
+        #gun key is e and you shoot up
+        if keys[pg.K_e]:
+            print("trying to shoot...")
+            #calls the pew function
+            self.pew()
             #make it so that if you click the key f your sword gets drawn if you don't have it drawn
         if keys[pg.K_f]:
             if not self.weapon_drawn:
@@ -74,6 +81,12 @@ class Player(pg.sprite.Sprite):
         #make it so that if you click the key g your sword gets taken away
         if keys[pg.K_g]:
             self.weapon_drawn = False
+
+
+    def pew(self):
+        p = PewPew(self.game, self.rect.x, self.rect.y)
+        print(p.rect.x)
+        print(p.rect.y)
 
     # def move(self, dx=0, dy=0):
     #     if not self.collide_with_walls(dx, dy):
@@ -192,6 +205,8 @@ class Player(pg.sprite.Sprite):
             #display your message 
             self.game.screen.blit(self.message, (350, 350))
     
+    
+    
 #sword class  
 class Sword(pg.sprite.Sprite):
     def __init__(self, game, x, y, w, h):
@@ -306,6 +321,35 @@ class PowerUp(pg.sprite.Sprite):
         self.y = y
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+
+
+class PewPew(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.pew_pews
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        self.image = pg.Surface((TILESIZE/4, TILESIZE/4))
+        self.image.fill(ORANGE)
+        self.rect = self.image.get_rect()
+        self.x = x
+        self.y = y
+        self.rect.x = x
+        self.rect.y = y
+        self.speed = 10
+        self.dir = self.game.player.dir
+        print("I created a pew pew...")
+    def collide_with_group(self, group, kill):
+        hits = pg.sprite.spritecollide(self, group, kill)
+        # if hits:
+        #     if str(hits[0].__class__.__name__) == "Coin":
+        #         self.moneybag += 1
+    def update(self):
+        self.collide_with_group(self.game.mobs, True)
+        self.rect.x += self.dir[0]*self.speed
+        self.rect.y += self.dir[1]*self.speed
+
+
+
 #Creates the mob
 class Mob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
