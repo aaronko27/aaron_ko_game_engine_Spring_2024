@@ -74,11 +74,7 @@ class Game:
                 print(line)
                 self.map_data.append(line)
         if keys[pg.K_p]:
-            with open(path.join(self.game_folder, LEVEL3), 'rt') as f:
-                print("opening 3rd world")
-                for line in f:
-                    print(line)
-                    self.map_data.append(line)
+            self.change_level(LEVEL3)
             for row, tiles in enumerate(self.map_data):
                 print(row)
                 for col, tile in enumerate(tiles):

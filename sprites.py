@@ -143,14 +143,6 @@ class Player(pg.sprite.Sprite):
                 self.hitpoints -= 10
                 #print out your current health 
                 print("You have " + str(self.hitpoints) + " Health")
-                #if self.moneybag == 7:
-                #    def load_data(self):
-                #        game_folder = path.dirname(__file__)
-                #        self.map_data = []
-                #        with open(path.join(game_folder, 'map1.txt'), 'rt') as f:
-                #            for line in f:
-                #                print(line)
-                #                self.map_data.append(line)
             #if your health is 0 than you die and quit the game
                 if self.hitpoints <= 0:
                     #when you have less than or equal to 0 health, your game quits
