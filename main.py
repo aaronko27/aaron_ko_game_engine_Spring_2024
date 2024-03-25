@@ -11,6 +11,8 @@ from os import path
 swords
 damages
 enemies
+land mines
+mega mobs
 moving enemies
 coins 
 player death
@@ -25,6 +27,8 @@ map change
 LEVEL1 = "map.txt"
 #set variable LEVEL2 equal to map2.txt
 LEVEL2 = "map2.txt"
+#sets variable LEVEL3 equal to map3.txt
+LEVEL3 = "map3.txt"
 
 #health_bar display function
 def draw_health_bar(surf, x, y, pct):
@@ -63,11 +67,49 @@ class Game:
         #self.img_folder = path.join(self.game_folder, 'images')
         #self.snd_folder = path.join(self.game_folder, 'sounds')
         self.map_data = []
+        keys = pg.key.get_pressed()
         #opening LEVEL1 variable or map.txt as file for map
         with open(path.join(self.game_folder, LEVEL1), 'rt') as f:
             for line in f:
                 print(line)
                 self.map_data.append(line)
+        if keys[pg.K_p]:
+            with open(path.join(self.game_folder, LEVEL3), 'rt') as f:
+                print("opening 3rd world")
+                for line in f:
+                    print(line)
+                    self.map_data.append(line)
+            for row, tiles in enumerate(self.map_data):
+                print(row)
+                for col, tile in enumerate(tiles):
+                    print(col)
+                    #sets 1 equal to a wall in map2.txt
+                    if tile == '1': 
+                        print("a wall at", row, col)
+                        Wall(self, col, row)
+                    #sets P equal to player in the map2.txt
+                    if tile == 'P':
+                        self.player = Player(self, col, row)
+                    #sets C equal to coins in the map2.txt
+                    if tile == 'C':
+                        Coin(self, col, row)
+                    #if tile == 'M':
+                    #    Mob(self, col, row)
+                    #sets 3 equal to Poweruos on the map2.txt
+                    if tile == '3':
+                        PowerUp(self, col, row)
+                    #sets M equal to the mobs on map2.txt
+                    if tile == 'M':
+                        Mob(self, col, row)
+                    #sets H equal to health in map2.txt
+                    if tile == 'H':
+                        Heal(self, col, row)
+                    if tile == 'K':
+                        MegaMob(self, col, row)
+
+
+
+
         '''
         The with statement is a context manager in Python. 
         It is used to ensure that a resource is properly closed or released 
@@ -114,6 +156,8 @@ class Game:
                 #sets H equal to health in map2.txt
                 if tile == 'H':
                    Heal(self, col, row)
+                if tile == 'K':
+                    MegaMob(self, col, row)
 
     # Create run method which runs the whole GAME
     def new(self):
@@ -127,6 +171,7 @@ class Game:
         self.heal = pg.sprite.Group()
         self.weapons = pg.sprite.Group()
         self.pew_pews = pg.sprite.Group()
+        self.mega_mobs = pg.sprite.Group()
         #fsself.mobs = pg.sprite.Group()
         # self.player1 = Player(self, 1, 1)
         # for x in range(10, 20):
@@ -151,6 +196,8 @@ class Game:
                     Mob(self, col, row)
                 if tile == 'H':
                     Heal(self, col, row)
+                if tile == 'K':
+                    MegaMob(self, col, row)
 
 
     def run(self):

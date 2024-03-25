@@ -72,6 +72,7 @@ class Player(pg.sprite.Sprite):
             print("trying to shoot...")
             #calls the pew function
             self.pew()
+            
             #make it so that if you click the key f your sword gets drawn if you don't have it drawn
         if keys[pg.K_f]:
             if not self.weapon_drawn:
@@ -155,6 +156,18 @@ class Player(pg.sprite.Sprite):
                     #when you have less than or equal to 0 health, your game quits
                     print("You died")
                     quit()
+
+            if str(hits[0].__class__.__name__) == "MegaMob":
+                print(hits[0].__class__.__name__)
+                #display in terminal that you collided with the mob
+                print("collided with mob")
+                #You die when you hit him
+                self.hitpoints -= 100
+                #print out your current health 
+                print("You died")
+                quit()
+
+
             #If you collect a heal power up then you heal 500 health
             if str(hits[0].__class__.__name__) == "Heal":
                 #add 50 to your current health
@@ -190,6 +203,8 @@ class Player(pg.sprite.Sprite):
         #keep object
         self.collide_with_group(self.game.mobs, False)
         #delete object
+        self.collide_with_group(self.game.mega_mobs, False)
+
         self.collide_with_group(self.game.heal, True)
         #Coins message
         #if self.moneybag == 7:
@@ -412,3 +427,63 @@ class Mob(pg.sprite.Sprite):
         self.rect.y = self.y
         self.collide_with_walls('y')
 
+class MegaMob(pg.sprite.Sprite):
+    def __init__(self, game, x, y):
+        self.groups = game.all_sprites, game.mobs
+        pg.sprite.Sprite.__init__(self, self.groups)
+        self.game = game
+        #Creates the mob image
+        self.image = pg.Surface((TILESIZE, TILESIZE))
+        #color the mob red
+        self.image.fill(PURPLE)
+        #set the shape of the mob
+        self.rect = self.image.get_rect()
+        #get the coordinates of the mob
+        self.x = x
+        self.y = y
+        self.vx, self.vy = 100, 100
+        self.x = x * TILESIZE
+        self.y = y * TILESIZE
+        #get the speed of the mob
+        self.speed = 1000
+        #health of the mob
+        self.hitpoints = 1000
+        self.rect.x = x * TILESIZE
+        self.rect.y = y * TILESIZE
+    #collides with walls function that prevents mobs from running through walls
+    def collide_with_walls(self, dir):
+        if dir == 'x':
+            # print('colliding on the x')
+            #doesn't delete walls when you collide with it
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            if hits:
+                #move the opposite direction when you collide with a wall
+                self.vx *= -1
+                self.rect.x = self.x
+        if dir == 'y':
+            # print('colliding on the y')
+            hits = pg.sprite.spritecollide(self, self.game.walls, False)
+            if hits:
+                self.vy *= -1
+                self.rect.y = self.y
+    #updates what happens when you collide with a mob
+    def update(self):
+        #kill the mob when the mob has less than 1 health
+        if self.hitpoints < 1:
+            self.kill()
+        self.rect.x += 1
+        self.x += self.vx * self.game.dt
+        self.y += self.vy * self.game.dt
+        
+        if self.rect.x < self.game.player.rect.x:
+            self.vx = 100
+        if self.rect.x > self.game.player.rect.x:
+            self.vx = -100    
+        if self.rect.y < self.game.player.rect.y:
+            self.vy = 100
+        if self.rect.y > self.game.player.rect.y:
+            self.vy = -100
+        self.rect.x = self.x
+        self.collide_with_walls('x')
+        self.rect.y = self.y
+        self.collide_with_walls('y')
