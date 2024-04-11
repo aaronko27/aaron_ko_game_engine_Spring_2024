@@ -9,7 +9,7 @@ vec = pg.math.Vector2
 
 SPRITESHEET = "theBell.png"
 dir = path.dirname(__file__)
-img_dir = path.join(dir, 'images')
+img_folder = path.join(dir, 'images')
 class Spritesheet:
     # utility class for loading and parsing spritesheets
     def __init__(self, filename):
@@ -22,6 +22,18 @@ class Spritesheet:
         # image = pg.transform.scale(image, (width, height))
         image = pg.transform.scale(image, (width * 4, height * 4))
         return image
+    
+class Animated_sprite(Sprite):
+    def __init__(self):
+        Sprite.__init__(self)
+        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
+        self.load_images()
+        self.image = self.standing_frames[0]
+        self.rect = self.image.get_rect()
+        self.jumping = False
+        self.walking = False
+        self.current_frame = 0
+        self.last_update = 0
 
 
 
@@ -37,6 +49,8 @@ class Player(pg.sprite.Sprite):
          # Color the player sprite green
         self.rect = self.image.get_rect()
         self.vx, self.vy = 0, 0 
+        self.spritesheet = Spritesheet(path.join(img_folder, 'theBell.png'))
+        self.load_images()
          # Velocity components
         self.x = x * TILESIZE
           # Initial x position

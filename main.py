@@ -258,7 +258,7 @@ class Game:
             #         self.player.move(dx=-1)
             #     if event.key == pg.K_RIGHT:
             #         self.player.move(dx=1)
-            #     if event.key == pg.K_UP:d
+            #     if event.key == pg.K_UP:
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
