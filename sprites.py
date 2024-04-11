@@ -1,9 +1,29 @@
 #This file was created by : aaron Ko
 import pygame as pg
 from settings import *
-
+from os import path
 # Define a vector class for easier vector operations
 vec = pg.math.Vector2
+
+
+
+SPRITESHEET = "theBell.png"
+dir = path.dirname(__file__)
+img_dir = path.join(dir, 'images')
+class Spritesheet:
+    # utility class for loading and parsing spritesheets
+    def __init__(self, filename):
+        self.spritesheet = pg.image.load(filename).convert()
+
+    def get_image(self, x, y, width, height):
+        # grab an image out of a larger spritesheet
+        image = pg.Surface((width, height))
+        image.blit(self.spritesheet, (0, 0), (x, y, width, height))
+        # image = pg.transform.scale(image, (width, height))
+        image = pg.transform.scale(image, (width * 4, height * 4))
+        return image
+
+
 
 # Player class representing the player character
 class Player(pg.sprite.Sprite):

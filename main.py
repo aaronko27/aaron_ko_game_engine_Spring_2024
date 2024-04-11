@@ -258,7 +258,7 @@ class Game:
             #         self.player.move(dx=-1)
             #     if event.key == pg.K_RIGHT:
             #         self.player.move(dx=1)
-            #     if event.key == pg.K_UP:
+            #     if event.key == pg.K_UP:d
             #         self.player.move(dy=-1)
             #     if event.key == pg.K_DOWN:
             #         self.player.move(dy=1)
@@ -267,7 +267,7 @@ class Game:
         #fills the start screen black from settings
         self.screen.fill(BGCOLOR)
         #draws this is the start screen at the start of the game the color white
-        self.draw_text(self.screen, "This is the start screen - press any key to play", 24, WHITE, WIDTH/2, HEIGHT/2)
+        self.draw_text(self.screen, "This is the start screen - press any key to play", 24, WHITE, 11, 10)
         pg.display.flip()
         #calls the wait for key function
         self.wait_for_key()
