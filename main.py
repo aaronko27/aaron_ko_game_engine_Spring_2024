@@ -8,19 +8,10 @@ from random import randint
 import sys
 from os import path
 '''
-swords
-damages
-enemies
-land mines
-mega mobs
-moving enemies
-coins 
-player death
-player health
-heal potion
-Health bar
-different levels
-map change
+my new goals
+adding images to my game
+adding a third level
+end screen to my game
 '''
 #Creating different maps for different levels.
 #set LEVEL1 equal to map.txt file
@@ -219,6 +210,9 @@ class Game:
         #checking to see if the moneybag is 7 and when all coins are collected change map and level
         if self.player.moneybag > 6:
             self.change_level(LEVEL2)
+        #when you have less than or equal to 0 health, your game quits
+        if self.player.hitpoints == 0:
+            self.show_end_screen()
     
     #draws the entire grid and colors the screen
     def draw_grid(self):
@@ -271,6 +265,17 @@ class Game:
         pg.display.flip()
         #calls the wait for key function
         self.wait_for_key()
+        
+    #create a start screen that requires user to click to send you to main game.
+    def show_end_screen(self):
+        #fills the start screen black from settings
+        self.screen.fill(BGCOLOR)
+        #draws this is the start screen at the start of the game the color white
+        self.draw_text(self.screen, "You died - press any key to try again", 24, WHITE, 11, 10)
+        pg.display.flip()
+        #calls the wait for key function
+        self.wait_for_key()
+        
     #the function that waits for the user to press any key
     def wait_for_key(self):
         waiting = True

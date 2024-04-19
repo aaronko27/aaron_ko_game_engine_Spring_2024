@@ -8,32 +8,32 @@ vec = pg.math.Vector2
 
 
 SPRITESHEET = "theBell.png"
-dir = path.dirname(__file__)
-img_folder = path.join(dir, 'images')
-class Spritesheet:
+#dir = path.dirname(__file__)
+#img_folder = path.join(dir, 'images')
+#class Spritesheet:
     # utility class for loading and parsing spritesheets
-    def __init__(self, filename):
-        self.spritesheet = pg.image.load(filename).convert()
+    #def __init__(self, filename):
+    #    self.spritesheet = pg.image.load(filename).convert()
 
-    def get_image(self, x, y, width, height):
+    #def get_image(self, x, y, width, height):
         # grab an image out of a larger spritesheet
-        image = pg.Surface((width, height))
-        image.blit(self.spritesheet, (0, 0), (x, y, width, height))
+        #image = pg.Surface((width, height))
+        #image.blit(self.spritesheet, (0, 0), (x, y, width, height))
         # image = pg.transform.scale(image, (width, height))
-        image = pg.transform.scale(image, (width * 4, height * 4))
-        return image
+        #image = pg.transform.scale(image, (width * 4, height * 4))
+        #return image
     
-class Animated_sprite(Sprite):
-    def __init__(self):
-        Sprite.__init__(self)
-        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
-        self.load_images()
-        self.image = self.standing_frames[0]
-        self.rect = self.image.get_rect()
-        self.jumping = False
-        self.walking = False
-        self.current_frame = 0
-        self.last_update = 0
+#class Animated_sprite(Sprite):
+#    def __init__(self):
+#        Sprite.__init__(self)
+#        self.spritesheet = Spritesheet(path.join(img_dir, SPRITESHEET))
+#        self.load_images()
+#        self.image = self.standing_frames[0]
+#        self.rect = self.image.get_rect()
+#        self.jumping = False
+#        self.walking = False
+#        self.current_frame = 0
+#        self.last_update = 0
 
 
 
@@ -49,8 +49,8 @@ class Player(pg.sprite.Sprite):
          # Color the player sprite green
         self.rect = self.image.get_rect()
         self.vx, self.vy = 0, 0 
-        self.spritesheet = Spritesheet(path.join(img_folder, 'theBell.png'))
-        self.load_images()
+        #self.spritesheet = Spritesheet(path.join(img_folder, 'theBell.png'))
+        #self.load_images()
          # Velocity components
         self.x = x * TILESIZE
           # Initial x position
@@ -178,10 +178,10 @@ class Player(pg.sprite.Sprite):
                 #print out your current health 
                 print("You have " + str(self.hitpoints) + " Health")
             #if your health is 0 than you die and quit the game
-                if self.hitpoints <= 0:
-                    #when you have less than or equal to 0 health, your game quits
-                    print("You died")
-                    quit()
+                # if self.hitpoints <= 0:
+                #     #when you have less than or equal to 0 health, your game quits
+                #     print("You died")
+                #     quit()
 
             if str(hits[0].__class__.__name__) == "MegaMob":
                 print(hits[0].__class__.__name__)
