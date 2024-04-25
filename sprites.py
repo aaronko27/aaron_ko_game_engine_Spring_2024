@@ -2,6 +2,7 @@
 import pygame as pg
 from settings import *
 from os import path
+from random import choice
 # Define a vector class for easier vector operations
 vec = pg.math.Vector2
 
@@ -72,7 +73,19 @@ class Player(pg.sprite.Sprite):
          # Flag to indicate if weapon is drawn
 
 
+    def teleport(self):
+        # Generate random coordinates for teleportation
+        new_x = choice(range(WIDTH))
+        new_y = choice(range(HEIGHT))
         
+        # Check if the new position is valid (not colliding with walls)
+        while pg.sprite.spritecollideany(self, self.game.walls):
+            new_x = choice(range(WIDTH))
+            new_y = choice(range(HEIGHT))
+
+        # Teleport the player to the new position
+        self.rect.x = new_x
+        self.rect.y = new_y
     #display function that allows you to display messages
     def display_message(self, message):
         self.message = self.font.render(message, True, WHITE)

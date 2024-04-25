@@ -7,11 +7,14 @@ from sprites import *
 from random import randint
 import sys
 from os import path
+from random import choice
+
 '''
 my new goals
+teleport cube my player to a random spot?
 adding images to my game
 adding a third level
-end screen to my game
+end screen to my game(completed)
 '''
 #Creating different maps for different levels.
 #set LEVEL1 equal to map.txt file
@@ -64,6 +67,7 @@ class Game:
             for line in f:
                 print(line)
                 self.map_data.append(line)
+        
         if keys[pg.K_p]:
             self.change_level(LEVEL3)
             for row, tiles in enumerate(self.map_data):
@@ -93,6 +97,8 @@ class Game:
                         Heal(self, col, row)
                     if tile == 'K':
                         MegaMob(self, col, row)
+
+        
 
 
 
@@ -213,6 +219,7 @@ class Game:
         #when you have less than or equal to 0 health, your game quits
         if self.player.hitpoints == 0:
             self.show_end_screen()
+            self.player.hitpoints += 100
     
     #draws the entire grid and colors the screen
     def draw_grid(self):
@@ -242,9 +249,16 @@ class Game:
             pg.display.flip()
 
     def events(self):
-         for event in pg.event.get():
+         
+        for event in pg.event.get():
             if event.type == pg.QUIT:
                 self.quit()
+            elif event.type == pg.KEYDOWN:
+                if event.key == pg.K_t:  # Change 't' to your desired teleport key
+                    self.player.teleport()
+            for event in pg.event.get():
+                if event.type == pg.QUIT:
+                    self.quit()
             #if event.key == pg.K_e:
             #        self.player.weapon_drawn = False
             # if event.type == pg.KEYDOWN:
