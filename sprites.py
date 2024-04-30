@@ -102,6 +102,10 @@ class Player(pg.sprite.Sprite):
         #left or A key allow you to move left
         if keys[pg.K_LEFT] or keys[pg.K_a]:
             self.vx = -self.speed
+        if keys[pg.K_m]:
+            with open("map3.txt", "w") as file:
+                file.write("Hello, world!")
+                
         #right or D key allow you to move right
         if keys[pg.K_RIGHT] or keys[pg.K_d]:
             self.vx = self.speed 
