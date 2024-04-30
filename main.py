@@ -23,6 +23,31 @@ LEVEL1 = "map.txt"
 LEVEL2 = "map2.txt"
 #sets variable LEVEL3 equal to map3.txt
 LEVEL3 = "map3.txt"
+coins_to_next = 6
+
+def load_level(file_path):
+    """Load a level from a text file."""
+    with open(file_path, "r") as file:
+        return [list(line.strip()) for line in file]
+
+def display_level(level):
+    """Display a level."""
+    for row in level:
+        print("".join(row))
+
+# Example usage
+level1 = load_level("map.txt")
+level2 = load_level("map2.txt")
+level3 = load_level("map3.txt")
+
+# Display the first level
+#display_level(level1)
+
+# Display the second level
+#display_level(level2)
+
+# Display the third level
+#display_level(level3)
 
 #health_bar display function
 def draw_health_bar(surf, x, y, pct):
@@ -214,8 +239,9 @@ class Game:
     def update(self):
         self.all_sprites.update()
         #checking to see if the moneybag is 7 and when all coins are collected change map and level
-        if self.player.moneybag > 6:
+        if self.player.moneybag > coins_to_next:
             self.change_level(LEVEL2)
+            
         #when you have less than or equal to 0 health, your game quits
         if self.player.hitpoints == 0:
             self.show_end_screen()

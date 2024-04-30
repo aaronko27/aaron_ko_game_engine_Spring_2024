@@ -8,6 +8,19 @@ vec = pg.math.Vector2
 
 
 
+def load_level(file_path):
+    """Load a level from a text file."""
+    with open(file_path, "r") as file:
+        return [list(line.strip()) for line in file]
+
+def display_level(level):
+    """Display a level."""
+    for row in level:
+        print("".join(row))
+level1 = load_level("map.txt")
+level2 = load_level("map2.txt")
+level3 = load_level("map3.txt")
+
 SPRITESHEET = "theBell.png"
 #dir = path.dirname(__file__)
 #img_folder = path.join(dir, 'images')
@@ -123,6 +136,42 @@ class Player(pg.sprite.Sprite):
             print("trying to shoot...")
             #calls the pew function
             self.pew()
+        if keys[pg.K_b]:
+            #display_level(level3)
+            self.game_folder = path.dirname(__file__)
+            with open(path.join(self.game_folder, lvl), 'rt') as f:
+                    for line in f:
+                        print(line)
+                        self.map_data.append(line)
+    #     # add new map with the same things.
+            for row, tiles in enumerate(self.map_data):
+                print(row)
+                for col, tile in enumerate(tiles):
+                    print(col)
+                #sets 1 equal to a wall in map2.txt
+                    if tile == '1': 
+                        print("a wall at", row, col)
+                        Wall(self, col, row)
+                #sets P equal to player in the map2.txt
+                    if tile == 'P':
+                        self.player = Player(self, col, row)
+                #sets C equal to coins in the map2.txt
+                    if tile == 'C':
+                        Coin(self, col, row)
+                #if tile == 'M':
+                #    Mob(self, col, row)
+                #sets 3 equal to Poweruos on the map2.txt
+                    if tile == '3':
+                        PowerUp(self, col, row)
+                #sets M equal to the mobs on map2.txt
+                    if tile == 'M':
+                        Mob(self, col, row)
+                #sets H equal to health in map2.txt
+                    if tile == 'H':
+                        Heal(self, col, row)
+                    if tile == 'K':
+                        MegaMob(self, col, row)        
+            
             
             #make it so that if you click the key f your sword gets drawn if you don't have it drawn
         if keys[pg.K_f]:
