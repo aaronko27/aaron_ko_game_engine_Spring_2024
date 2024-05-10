@@ -214,6 +214,7 @@ class Player(pg.sprite.Sprite):
                     self.x = hits[0].rect.right
                 self.vx = 0
                 self.rect.x = self.x
+                self.hitpoints -= 10
         if dir == 'y':
             hits = pg.sprite.spritecollide(self, self.game.walls, False)
             if hits:
@@ -223,6 +224,7 @@ class Player(pg.sprite.Sprite):
                     self.y = hits[0].rect.bottom
                 self.vy = 0
                 self.rect.y = self.y
+                self.hitpoints -= 10
 
     #This function tells you what happens when you collide with a object and allws you to control what happens when they collide
     
