@@ -265,7 +265,7 @@ class Player(pg.sprite.Sprite):
             #If you collect a heal power up then you heal 500 health
             if str(hits[0].__class__.__name__) == "Heal":
                 #add 50 to your current health
-                self.hitpoints += 50
+                self.hitpoints += 100
                 #print your current health in terminal
                 print("You healed, now you have " + str(self.hitpoints) + " Health")
             #Collecting a powerup heals you
