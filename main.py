@@ -11,10 +11,10 @@ from random import choice
 
 '''
 my new goals
-teleport cube my player to a random spot?
-adding images to my game
-adding a third level
-end screen to my game(completed)
+Hypnotize feature
+wall damage
+heal potion heals even more
+end screen
 '''
 #Creating different maps for different levels.
 #set LEVEL1 equal to map.txt file
@@ -46,7 +46,7 @@ level3 = load_level("map3.txt")
 # Display the second level
 #display_level(level2)
 
-# Display the third level
+# Display the third leve
 #display_level(level3)
 
 #health_bar display function
@@ -81,6 +81,13 @@ class Game:
         #load all the data and run the game
         self.load_data()
     #load data function loads all the files as the map and run sthe actual game
+    def toggle_mobs(self):
+        self.can_move = True
+        for mobs in self.mobs:
+            mobs.can_move = not mobs.can_move
+        for mega_mobs in self.mega_mobs:
+            mega_mobs.can_move = not mega_mobs.can_move
+        
     def load_data(self):
         self.game_folder = path.dirname(__file__)
         #self.img_folder = path.join(self.game_folder, 'images')

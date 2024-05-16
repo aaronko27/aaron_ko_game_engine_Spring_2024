@@ -17,6 +17,7 @@ def display_level(level):
     """Display a level."""
     for row in level:
         print("".join(row))
+
 level1 = load_level("map.txt")
 level2 = load_level("map2.txt")
 level3 = load_level("map3.txt")
@@ -136,6 +137,11 @@ class Player(pg.sprite.Sprite):
             print("trying to shoot...")
             #calls the pew function
             self.pew()
+
+        if keys[pg.K_u]:
+            # Toggle mobs on/off
+            self.game.toggle_mobs()
+
         if keys[pg.K_b]:
             #display_level(level3)
             self.game_folder = path.dirname(__file__)
@@ -483,6 +489,7 @@ class Mob(pg.sprite.Sprite):
         self.hitpoints = 100
         self.rect.x = x * TILESIZE
         self.rect.y = y * TILESIZE
+        self.can_move = True
     #collides with walls function that prevents mobs from running through walls
     def collide_with_walls(self, dir):
         if dir == 'x':
@@ -507,19 +514,21 @@ class Mob(pg.sprite.Sprite):
         self.rect.x += 1
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
+
+        if self.can_move:
+            if self.rect.x < self.game.player.rect.x:
+                self.vx = 100
+            if self.rect.x > self.game.player.rect.x:
+                self.vx = -100    
+            if self.rect.y < self.game.player.rect.y:
+                self.vy = 100
+            if self.rect.y > self.game.player.rect.y:
+                self.vy = -100
+            self.rect.x = self.x
+            self.collide_with_walls('x')
+            self.rect.y = self.y
+            self.collide_with_walls('y')
         
-        if self.rect.x < self.game.player.rect.x:
-            self.vx = 100
-        if self.rect.x > self.game.player.rect.x:
-            self.vx = -100    
-        if self.rect.y < self.game.player.rect.y:
-            self.vy = 100
-        if self.rect.y > self.game.player.rect.y:
-            self.vy = -100
-        self.rect.x = self.x
-        self.collide_with_walls('x')
-        self.rect.y = self.y
-        self.collide_with_walls('y')
 
 class MegaMob(pg.sprite.Sprite):
     def __init__(self, game, x, y):
@@ -543,6 +552,7 @@ class MegaMob(pg.sprite.Sprite):
         #health of the mob
         self.hitpoints = 1000
         self.rect.x = x * TILESIZE
+        self.can_move = True
         self.rect.y = y * TILESIZE
     #collides with walls function that prevents mobs from running through walls
     def collide_with_walls(self, dir):
@@ -568,16 +578,16 @@ class MegaMob(pg.sprite.Sprite):
         self.rect.x += 1
         self.x += self.vx * self.game.dt
         self.y += self.vy * self.game.dt
-        
-        if self.rect.x < self.game.player.rect.x:
-            self.vx = 100
-        if self.rect.x > self.game.player.rect.x:
-            self.vx = -100    
-        if self.rect.y < self.game.player.rect.y:
-            self.vy = 100
-        if self.rect.y > self.game.player.rect.y:
-            self.vy = -100
-        self.rect.x = self.x
-        self.collide_with_walls('x')
-        self.rect.y = self.y
-        self.collide_with_walls('y')
+        if self.can_move:
+            if self.rect.x < self.game.player.rect.x:
+                self.vx = 100
+            if self.rect.x > self.game.player.rect.x:
+                self.vx = -100    
+            if self.rect.y < self.game.player.rect.y:
+                self.vy = 100
+            if self.rect.y > self.game.player.rect.y:
+                self.vy = -100
+            self.rect.x = self.x
+            self.collide_with_walls('x')
+            self.rect.y = self.y
+            self.collide_with_walls('y')
